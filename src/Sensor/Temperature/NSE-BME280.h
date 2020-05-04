@@ -1,7 +1,6 @@
 #ifndef NSE_BME280_H
 #define NSE_BME280_H
 
-#include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <LiquidCrystal.h>
 
@@ -23,6 +22,7 @@ class BME280
         ~BME280();
 
         void setup();
+        float getTemperature();
         void show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type);
     protected:
 

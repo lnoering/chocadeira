@@ -22,6 +22,11 @@ void BME280::setup()
     }
 }
 
+float BME280::getTemperature()
+{
+    return _bme->readTemperature();
+}
+
 void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type)
 {
     char parse[20] = "",
