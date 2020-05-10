@@ -64,21 +64,22 @@ float Temperature::proccess(float temperature)
     return (propotional + _integral + derivative);
 }
 
-void Temperature::control(float temperature, LiquidCrystal & lcd)
+void Temperature::control(float temperature)
 {
     float pid = proccess(temperature);
 
     _pwmOut = convertPIDtoPWM(pid);
 
     analogWrite(_pinControl,_pwmOut);
+}
 
-    char display[20],
+void Temperature::show(LiquidCrystal & lcd,uint8_t col, uint8_t lin)
+{
+    char display[(20 - col)],
          x[8];
     dtostrf(_integral,5,2,x);
     sprintf(display,"%03u %s",_pwmOut,x);
-    lcd.setCursor(0,3);
-    // lcd.print(_pwmOut);
-    // lcd.print(" - ");
+    lcd.setCursor(col,lin);
     lcd.print(display);
 }
 

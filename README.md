@@ -17,29 +17,28 @@
 ### IO
     Obs.: PINOS conforme a placa do arduino.
     - PWM para o controle de temperatura. (PID)
-        - PINO (9).
+        - PINO (3).
     - DISPLAY
         - PINO (7) - rs
         - PINO (6) - enable
         - PINO (5) - d0
         - PINO (4) - d1
-        - PINO (3) - d2
+        - PINO (9) - d2 
         - PINO (2) - d3
     - Sensor de temperatura (BME280) i2C
-        - PINO (4) - SCL
-        - PINO (5) - SDA
+        - PINO (19) - SCL
+        - PINO (18) - SDA
     - Real Time Clock (DS3231M) i2C
-        - PINO (4) - SCL
-        - PINO (5) - SDA
+        - PINO (19) - SCL
+        - PINO (18) - SDA
     - Sensor de água
-        - PINO (3)
+        - PINO (17)
     - Saída para acionar resistência dentro da água.
-        - PINO (2)
+        - PINO (11)
     - Botões Menu
         - PINO (12) - OK
         - PINO (13) - LEFT
-        - PINO (11) - RIGHT
-
+        - PINO (10) - RIGHT 
 ### Menu
 > "Set Point Temperatura"
 -   Setar a temperatura que manterá a saída acionada.

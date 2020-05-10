@@ -1,5 +1,5 @@
-#ifndef NSE_TEMPERATURE_H
-#define NSE_TEMPERATURE_H
+#ifndef NSE_PID_H
+#define NSE_PID_H
 
 #include <Arduino.h>
 #include <inttypes.h>
@@ -17,11 +17,11 @@ enum PWM_PRECISION {
     MIN = 0,
 };
 
-class Temperature
+class PID
 {
     public:
-        Temperature(uint8_t pinPWM);
-        ~Temperature();
+        PID(uint8_t pinPWM);
+        ~PID();
 
         void setup();
         void setKI(float ki);
@@ -29,20 +29,25 @@ class Temperature
         void setKD(float kd);
         void setPoint(float setPoint);
         
-        void control(float temperature);
+        void control(float inputValue);
 
         void show(LiquidCrystal & lcd,uint8_t col, uint8_t lin);
+
+        void setEnable(bool value);
+        bool isEnable();
         
     protected:
-        float getErro(float temperature);
+        float getErro(float inputValue);
         float getProportional(float erro);
         float getIntegral(float erro);
-        float getDerivative(float nowTemperature);
+        float getDerivative(float nowInputValue);
 
-        float proccess(float temperature);
+        float proccess(float inputValue);
         float proccessTime();
 
         uint8_t convertPIDtoPWM(float pid);
+
+        void reset();
 
     private:
         uint8_t _pinControl;
@@ -50,11 +55,13 @@ class Temperature
         float _kP;
         float _kI;
         float _kD;
-        float _lastTemperature;
+        float _lastInputValue;
         float _integral;
         uint8_t _pwmOut;
         long _lastTimeProcess;
+
+        bool _enable = true;
 };
 
 
-#endif //NSE_TEMPERATURE_H
+#endif //NSE_PID_H

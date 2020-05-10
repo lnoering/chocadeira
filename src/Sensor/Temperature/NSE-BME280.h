@@ -23,7 +23,10 @@ class BME280
 
         void setup();
         float getTemperature();
+        float getHumidity();
+
         void show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type);
+    
     protected:
 
     private:
