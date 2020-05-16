@@ -10,7 +10,7 @@ BME280::BME280()
 
 BME280::~BME280()
 {
-    delete & _bme;
+    free(_bme);
 }
 
 void BME280::setup()

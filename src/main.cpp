@@ -1,19 +1,7 @@
-#include "Arduino.h"
-#include <LiquidCrystal.h>
-#include "Sensor/RTC/NSE-DS3231.h"
-#include "Sensor/Temperature/NSE-BME280.h"
-#include "Control/PID/NSE-PID.h"
-#include "Control/Humidity/NSE-Humidity.h"
+#ifndef __MAIN__CPP__
+#define __MAIN__CPP__
 
-
-LiquidCrystal lcd(7, 6, 5, 4, 9, 2);
-DS3231 rtc;
-BME280 bme;
-PID tmp(3);
-Humidity hmdt(17,11);
-
-uint8_t fiveSeconds = 0;
-uint8_t oneSecond = 0;
+#include "main.h"
 
 
 void setup() {
@@ -24,17 +12,12 @@ void setup() {
     bme.setup();
 
     tmp.setup();
-    tmp.setPoint(27.27);
+    tmp.setPoint(22.27);
 
     hmdt.setup();
     hmdt.setPoint(70.5);
 
-    // Configuração do timer2
-    // TCNT2 //Timer/Counter2 (8-bit)
-    // OCR2A //Timer/Counter2 Output Compare Register A
-    // OCR2B //Timer/Counter2 Output Compare Register B
-
-    cli(); //desabilita a interrupção global
+    noInterrupts(); //desabilita a interrupção global
         //TIMER 1 - para controle de leituras
         TCCR1A = 0;                         //confira timer para operação normal pinos OC1A e OC1B desconectados
         TCCR1B = 0;                         //limpa registrador
@@ -45,18 +28,28 @@ void setup() {
         
         TIMSK1 |= (1 << TOIE1);             // habilita a interrupção do TIMER1
 
-        //TIMER 2 - para as saidas 11 e 3 de uso do PWM
-        TCCR2A = _BV(COM2A1) | _BV(COM2B1) | _BV(WGM20);
-        TCCR2B = _BV(CS22);
-        OCR2A = 180;
-        OCR2B = 50;
-    sei(); //habilita a interrupção global
+        //TIMER 2
+		TCCR2A = 0; // set entire TCCR2A register to 0
+		TCCR2B = 0; // same for TCCR2B
+		TCNT2  = 0; // initialize counter value to 0
+		// set compare match register for 8333.333333333334 Hz increments
+		OCR2A = 239; // = 16000000 / (8 * 8333.333333333334) - 1 (must be <256)
+		// turn on CTC mode
+		TCCR2B |= (1 << WGM21);
+		// Set CS22, CS21 and CS20 bits for 8 prescaler
+		TCCR2B |= (0 << CS22) | (1 << CS21) | (0 << CS20);
+		// enable timer compare interrupt
+		TIMSK2 |= (1 << OCIE2A);
+    interrupts(); //habilita a interrupção global
 
- }
+    pinMode(_pinInterrupt, INPUT_PULLUP);              
+    attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, FALLING);
+	pinMode(16, OUTPUT);  
+}
 
 void loop() {
     if (oneSecond >= 1) {
-        rtc.show(lcd,0,0);
+    	rtc.show(lcd,0,0);
         bme.show(lcd,0,1,BME280Types::TEMPERATURE);
         bme.show(lcd,0,2,BME280Types::HUMIDITY);
         tmp.show(lcd,0,3);
@@ -80,3 +73,41 @@ ISR(TIMER1_OVF_vect)
     // hmdt.control(bme.getHumidity());
     // hmdt.show(lcd,6,2);
 }
+
+void interruptZeroCross()
+{  
+	if (step > debouceFreqStep || !zero_cross) {
+		// digitalWrite(AC_pin, LOW);       // turn off TRIAC (and AC)
+		TCNT2  = 0;
+		step = 0;
+		zero_cross = true;   
+		digitalWrite(16, state);
+      	state = !state;
+	}
+}
+
+// Turn on the TRIAC at the appropriate time
+ISR(TIMER2_COMPA_vect){        
+    if(zero_cross) {
+        if(step >= tmp.getPwmOut()) { //tmp.getPwmOut()
+			tmp.setOutput(false);
+        } else {
+            tmp.setOutput(true);
+        }
+
+		if(step >= hmdt.getPwmOut()) {
+            hmdt.setOutput(false);
+        } else {
+			hmdt.setOutput(true);
+        }
+
+        step ++;       
+        if (step >= freqStep) {
+            zero_cross = false; //reset zero cross detection
+            step = 0;
+        }           
+                
+    }    
+}  
+
+#endif //__MAIN__CPP__

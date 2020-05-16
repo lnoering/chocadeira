@@ -9,8 +9,8 @@
 class Humidity: public PID
 {
     public:
-        // Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater);
-        Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater) : _pinInWater(pinInWater), PID(pinOutHeatsWater) {};
+        Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater);
+        // Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater) : _pinInWater(pinInWater), PID(pinOutHeatsWater) {};
         ~Humidity();
 
         void setup();

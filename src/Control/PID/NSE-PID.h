@@ -35,6 +35,9 @@ class PID
 
         void setEnable(bool value);
         bool isEnable();
+
+        uint8_t getPwmOut();
+        void setOutput(bool on);
         
     protected:
         float getErro(float inputValue);

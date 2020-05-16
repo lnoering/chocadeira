@@ -3,15 +3,15 @@
 
 #include "NSE-Humidity.h"
 
-// Humidity::Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater)
-// {
-//     _pinInWater = pinInWater;
-//     PID::PID(pinOutHeatsWater);
-// }
+Humidity::Humidity(uint8_t pinInWater, uint8_t pinOutHeatsWater) : _pinInWater(pinInWater), PID(pinOutHeatsWater)
+{
+
+
+}
 
 Humidity::~Humidity() 
 {
-
+    
 }
 
 void Humidity::setup()

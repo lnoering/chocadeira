@@ -10,7 +10,7 @@ DS3231::DS3231()
 
 DS3231::~DS3231()
 {
-    delete &_rtc;
+    free(_rtc);
 }
 
 void DS3231::setup()

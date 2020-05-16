@@ -3,14 +3,14 @@
 
 #include "NSE-PID.h"
 
-PID::PID(uint8_t pinPWM)
+PID::PID(uint8_t pinPWM) : _pinControl(pinPWM)
 {
-    _pinControl = pinPWM;
+    
 }
 
 PID::~PID() 
 {
-
+    // delete this;
 }
 
 void PID::setup()
@@ -22,7 +22,8 @@ void PID::setup()
     reset();
 
     pinMode(_pinControl,OUTPUT);
-    analogWrite(_pinControl,_pwmOut);
+    // analogWrite(_pinControl,_pwmOut);
+    digitalWrite(_pinControl,LOW);
 }
 
 void PID::setKI(float ki)
@@ -70,7 +71,7 @@ void PID::control(float inputValue)
 
         _pwmOut = convertPIDtoPWM(pid);
 
-        analogWrite(_pinControl,_pwmOut);
+        // analogWrite(_pinControl,_pwmOut);
     }
 }
 
@@ -145,13 +146,26 @@ void PID::setEnable(bool value)
     _enable = value;
     if (!_enable) {
         reset();
-        analogWrite(_pinControl,PIDtoPWM::RESFRIAR);
+        // analogWrite(_pinControl,PIDtoPWM::RESFRIAR);
+        digitalWrite(_pinControl,LOW);
     }
 }
 
 bool PID::isEnable()
 {
     return _enable;
+}
+
+uint8_t PID::getPwmOut()
+{
+    return (uint8_t) map(_pwmOut,0,255,0,65); 
+}
+
+void PID::setOutput(bool on) 
+{
+    if (this->isEnable()) {
+        digitalWrite(_pinControl,(on?HIGH:LOW));
+    }
 }
 
 #endif //NSE_PID_CPP

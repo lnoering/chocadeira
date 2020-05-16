@@ -24,7 +24,7 @@
         - PINO (5) - d0
         - PINO (4) - d1
         - PINO (9) - d2 
-        - PINO (2) - d3
+        - PINO (8) - d3
     - Sensor de temperatura (BME280) i2C
         - PINO (19) - SCL
         - PINO (18) - SDA
@@ -39,6 +39,8 @@
         - PINO (12) - OK
         - PINO (13) - LEFT
         - PINO (10) - RIGHT 
+    - Detect Zero Cross
+        - PINO (2)
 ### Menu
 > "Set Point Temperatura"
 -   Setar a temperatura que manterá a saída acionada.
