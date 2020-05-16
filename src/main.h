@@ -19,12 +19,12 @@ uint8_t fiveSeconds = 0;
 uint8_t oneSecond = 0;
 
 volatile boolean zero_cross = false;  // Boolean to store a "switch" to tell us if we have crossed zero
-volatile int freqStep = 65;    // This is the delay-per-brightness step in microseconds.
-volatile int debouceFreqStep = (freqStep - 3);
-volatile int dim = 0;
-volatile int step = 0; 
 
-volatile byte state = LOW;
+//65 = 60kz
+//75 = 50hz
+volatile uint8_t freqStep = 65;    // This is the delay-per-brightness step in microseconds.
+
+volatile uint8_t step = 0; 
 
 void setup();
 

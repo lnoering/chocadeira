@@ -12,7 +12,7 @@ void setup() {
     bme.setup();
 
     tmp.setup();
-    tmp.setPoint(22.27);
+    tmp.setPoint(24.27);
 
     hmdt.setup();
     hmdt.setPoint(70.5);
@@ -43,7 +43,9 @@ void setup() {
     interrupts(); //habilita a interrupção global
 
     pinMode(_pinInterrupt, INPUT_PULLUP);              
-    attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, FALLING);
+    // attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, RISING);
+    
 	pinMode(16, OUTPUT);  
 }
 
@@ -76,28 +78,22 @@ ISR(TIMER1_OVF_vect)
 
 void interruptZeroCross()
 {  
-	if (step > debouceFreqStep || !zero_cross) {
-		// digitalWrite(AC_pin, LOW);       // turn off TRIAC (and AC)
-		TCNT2  = 0;
-		step = 0;
-		zero_cross = true;   
-		digitalWrite(16, state);
-      	state = !state;
-	}
+    TCNT2  = 0;
+    step = 0;
+    zero_cross = true;   
+    
+    tmp.setOutput(false);
+    hmdt.setOutput(false);
 }
 
 // Turn on the TRIAC at the appropriate time
 ISR(TIMER2_COMPA_vect){        
     if(zero_cross) {
-        if(step >= tmp.getPwmOut()) { //tmp.getPwmOut()
-			tmp.setOutput(false);
-        } else {
+        if(step >= ((tmp.getPwmOut()-freqStep)*-1)) {
             tmp.setOutput(true);
         }
 
-		if(step >= hmdt.getPwmOut()) {
-            hmdt.setOutput(false);
-        } else {
+		if(step  >= ((hmdt.getPwmOut()-freqStep)*-1)) {
 			hmdt.setOutput(true);
         }
 
@@ -106,8 +102,15 @@ ISR(TIMER2_COMPA_vect){
             zero_cross = false; //reset zero cross detection
             step = 0;
         }           
-                
-    }    
+    } else {
+        if (step >= freqStep) {
+            //TODO - implementar alarme para avisar problema no cross detecting
+            hmdt.setOutput(false);
+            tmp.setOutput(false);
+        } else {
+            step ++;
+        }
+    }
 }  
 
 #endif //__MAIN__CPP__
