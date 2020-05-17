@@ -41,6 +41,8 @@
         - PINO (10) - RIGHT 
     - Detect Zero Cross
         - PINO (2)
+    - Buzzer para Alarme
+        - PINO (16)
 ### Menu
 > "Set Point Temperatura"
 -   Setar a temperatura que manterá a saída acionada.

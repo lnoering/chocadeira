@@ -7,8 +7,23 @@
 #include "Sensor/Temperature/NSE-BME280.h"
 #include "Control/PID/NSE-PID.h"
 #include "Control/Humidity/NSE-Humidity.h"
+#include "Control/Menu/NSE-Menu.h"
+
+char *txtMENU[] = {
+    "Set Point Temp.    ",
+    "Set Ki Temperature ",
+    "Set Kp Temperature ",
+    "Set Kd Temperature ",
+    "Set Point Humidity ",
+    "Set Ki Humidity    ",
+    "Set Kp Humidity    ",
+    "Set Kd Humidity    ",
+    "Salvar e Sair      ",
+    "Sair               ",
+};
 
 LiquidCrystal lcd(7, 6, 5, 4, 9, 8);
+Menu menu(lcd, txtMENU, 13,10,12);
 DS3231 rtc;
 BME280 bme;
 PID tmp(3);

@@ -17,6 +17,8 @@ void setup() {
     hmdt.setup();
     hmdt.setPoint(70.5);
 
+    menu.setup();
+
     noInterrupts(); //desabilita a interrupção global
         //TIMER 1 - para controle de leituras
         TCCR1A = 0;                         //confira timer para operação normal pinos OC1A e OC1B desconectados
@@ -63,6 +65,8 @@ void loop() {
 
         oneSecond = 0;
     }
+
+    menu.loop();
 }
 
 ISR(TIMER1_OVF_vect)
