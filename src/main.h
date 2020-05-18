@@ -10,6 +10,8 @@
 #include "Control/Menu/NSE-Menu.h"
 
 char *txtMENU[] = {
+    "Configurar Data    ",
+    "Configurar Hora    ",
     "Set Point Temp.    ",
     "Set Ki Temperature ",
     "Set Kp Temperature ",
