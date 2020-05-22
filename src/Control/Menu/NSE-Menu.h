@@ -4,7 +4,6 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
-#include <EEPROM.h>
 #include "../../Sensor/Button/NSE-Button.h"
 
 #if !defined(ARRAY_SIZE)
@@ -58,23 +57,19 @@ class Menu
         virtual ~Menu(); 
         void control(float temperature);
     
-        void setup();
+        void setup(void (*__upParams)(MYDATA));
         void loop();
         void render(char * render, byte x, byte y);
         void openMenu();    
         void readConfiguration();
         void writeConfiguration();
         MENUBUTTON readButtons();
-        void openSubMenu(byte menuID, MENUTYPE screen, float *value, float minValue, float maxValue, char * format = "");
-        void openSubMenu(byte menuID, MENUTYPE screen, int *value, int minValue, int maxValue, char * format = "" );
+        void openSubMenu(byte menuID, MENUTYPE screen, float *value, float minValue, float maxValue, char * format);
+        void openSubMenu(byte menuID, MENUTYPE screen, int *value, int minValue, int maxValue, char * format);
         void openSubMenu (byte menuID, MENUTYPE screen, byte * value, const char * options[]);
         void openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct);
         void openSubMenu(byte menuID, MENUTYPE screen, struct TIME *timeStruct);
 
-        float getSetPoint();
-        int getOffsetRele();
-        char getTemperatureFormat();
-        float getTemperatureOffset();
     private:
         float           _temperature;
         unsigned int    _timeToControl;
@@ -104,8 +99,7 @@ class Menu
         Button *_btnDown;
         Button *_btnEnter;
 
-
-          
+        void (*_upParams)(MYDATA);          
 };
 
 #endif

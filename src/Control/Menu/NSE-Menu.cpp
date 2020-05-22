@@ -2,6 +2,8 @@
 #define NSE_MENU_CPP
 
 #include "NSE-Menu.h"
+#include <EEPROM.h>
+
 
 const char *txtFormats[] = {"C","F"};
 
@@ -47,26 +49,28 @@ Menu::~Menu()
     delete _btnEnter;
 }
 
-void Menu::setup()
+void Menu::setup(void (*__upParams)(MYDATA))
 {
-    memory.d.date.dia = 17;
-    memory.d.date.mes = 05;
-    memory.d.date.ano = 2020;
-    memory.d.time.hora = 10;
-    memory.d.time.minuto = 25;
-    memory.d.time.segundo = 45;
-    memory.d.tempSetPoint = 10.0;
-    memory.d.tempSetKi = 1.0;
-    memory.d.tempSetKp = 1.0;
-    memory.d.tempSetKd = 1.0;
+    // memory.d.date.dia = 17;
+    // memory.d.date.mes = 05;
+    // memory.d.date.ano = 2020;
+    // memory.d.time.hora = 10;
+    // memory.d.time.minuto = 25;
+    // memory.d.time.segundo = 45;
+    // memory.d.tempSetPoint = 10.0;
+    // memory.d.tempSetKi = 1.0;
+    // memory.d.tempSetKp = 1.0;
+    // memory.d.tempSetKd = 1.0;
 
-    memory.d.hmdtSetPoint = 10.0;
-    memory.d.hmdtSetKi = 1.0;
-    memory.d.hmdtSetKp = 1.0;
-    memory.d.hmdtSetKd = 1.0;
-    writeConfiguration();
+    // memory.d.hmdtSetPoint = 10.0;
+    // memory.d.hmdtSetKi = 1.0;
+    // memory.d.hmdtSetKp = 1.0;
+    // memory.d.hmdtSetKd = 1.0;
 
+    _upParams = __upParams; 
+    
     readConfiguration();
+    (*_upParams)(memory.d);
 
     _lcd.createChar(_iARROW, _bARROW);
 
@@ -94,15 +98,10 @@ void Menu::openMenu()
     boolean exitMenu   = false;
     boolean forcePrint = true;
     
-    int line = 0;
     int optionControl = 1;
-    unsigned int invert= 0;
     char format[_columnsLCD];
 
     int graphMenu     = 0;
-    int oldOptControl     = 1;
-    int lineWalk      = 0;
-    int countAction = 0;
 
 
     _lcd.clear();
@@ -153,26 +152,25 @@ void Menu::openMenu()
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetPoint, -20.0, 99.9, format); 
                     break;
                 case 3:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKi, -20.0, 99.9,'Ki'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKi, -20.0, 99.9,(char*)"Ki"); 
                     break;
                 case 4:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKp, -20.0, 99.9,'Kp'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKp, -20.0, 99.9,(char*)"Kp"); 
                     break;
                 case 5:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKd, -20.0, 99.9,'Kd'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKd, -20.0, 99.9,(char*)"Kd"); 
                     break;
-                case 6:     
-                        sprintf(format,"%c%c",char(223),'C');
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetPoint, -20.0, 99.9, format); 
+                case 6:
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetPoint, 0.0, 99.9,(char*)"%"); 
                     break;
                 case 7:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKi, -20.0, 99.9,'Ki'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKi, -20.0, 99.9,(char*)"Ki"); 
                     break;
                 case 8:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKp, -20.0, 99.9,'Kp'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKp, -20.0, 99.9,(char*)"Kp"); 
                     break;
                 case 9:
-                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKd, -20.0, 99.9,'Kd'); 
+                        openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKd, -20.0, 99.9,(char*)"Kd"); 
                     break;
                 // case 1: openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.delay, 0, 60, "s"    ); break;
                 // case 2: openSubMenu( idxMenu, MENUTYPE::List,  &memory.d.format,  txtFormats    ); break;
@@ -191,14 +189,11 @@ void Menu::openMenu()
         {
             forcePrint = false;
 
-            static const byte endFor1 = (_totOptions+_rowsLCD-1)/_rowsLCD;
-
-            // line = (idxMenu - graphMenu) % _rowsLCD;
             byte endFor2 = graphMenu+_rowsLCD;
 
             //Criar o tamanho de colunas em branco conforme a config do display.
             String print;            
-            for(char y=0; y < _columnsLCD; y++)
+            for(unsigned int y=0; y < _columnsLCD; y++)
             {
                 print += ' ';
             }
@@ -406,7 +401,7 @@ void Menu::openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct) {
 }
 
 
-void Menu::openSubMenu (byte menuID, MENUTYPE screen, int * value, int minValue, int maxValue, char * format = "")
+void Menu::openSubMenu (byte menuID, MENUTYPE screen, int * value, int minValue, int maxValue, char * format = (char*)"")
 {
     boolean exitSubMenu = false;
     boolean forcePrint  = true;
@@ -471,18 +466,19 @@ void Menu::openSubMenu (byte menuID, MENUTYPE screen, int * value, int minValue,
 
 void Menu::readConfiguration()
 {
-    for( int i=0 ; i < sizeof(memory.d) ; i++  )
+    for( unsigned int i=0 ; i < sizeof(memory.d) ; i++ ) {
         memory.b[i] = EEPROM.read(i);
-
-    // memory.d.offsetTemp = 0.5;
-
+    }
     writeConfiguration();
 }
 
 void Menu::writeConfiguration()
 {
-    for( int i=0 ; i<sizeof(memory.d) ; i++  )
+    for( unsigned int i=0 ; i<sizeof(memory.d) ; i++ ) {
         EEPROM.write( i, memory.b[i] );
+    }
+
+    (*_upParams)(memory.d);
 }
 
 /**
@@ -494,7 +490,7 @@ void Menu::writeConfiguration()
  * @param maxValue  Valor maximo que pode ter a variavel.
  */
 
-void Menu::openSubMenu (byte menuID, MENUTYPE screen, float *value, float minValue, float maxValue, char * format = "")
+void Menu::openSubMenu (byte menuID, MENUTYPE screen, float *value, float minValue, float maxValue, char * format = (char*)"")
 {
     boolean exitSubMenu = false;
     boolean forcePrint  = true;
@@ -555,7 +551,7 @@ void Menu::openSubMenu (byte menuID, MENUTYPE screen, byte * value, const char *
     boolean forcePrint  = true;
 
     int minValue = 0;
-    int maxValue = sizeof(options)-1;
+    int maxValue = sizeof(*options)-1;
 
     _lcd.clear();
 
@@ -596,25 +592,6 @@ void Menu::openSubMenu (byte menuID, MENUTYPE screen, byte * value, const char *
     _lcd.clear();
 }
 
-float Menu::getSetPoint()
-{
-    // return memory.d.setPoint;
-}
-
-int Menu::getOffsetRele()
-{
-    // return memory.d.delay;
-}
-
-char Menu::getTemperatureFormat()
-{
-    // return *txtFormats[memory.d.format];
-}
-
-float Menu::getTemperatureOffset()
-{
-    // return memory.d.offsetTemp;
-}
 
 MENUBUTTON Menu::readButtons()
 {

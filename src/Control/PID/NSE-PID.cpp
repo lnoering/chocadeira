@@ -15,14 +15,9 @@ PID::~PID()
 
 void PID::setup()
 {
-    _kP = 1.0;
-    _kI = 1.0;
-    _kD = 0.5;
-
     reset();
 
     pinMode(_pinControl,OUTPUT);
-    // analogWrite(_pinControl,_pwmOut);
     digitalWrite(_pinControl,LOW);
 }
 

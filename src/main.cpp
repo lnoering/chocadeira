@@ -12,12 +12,15 @@ void setup() {
     bme.setup();
 
     tmp.setup();
-    tmp.setPoint(24.27);
+    // tmp.setPoint(30.27);
 
     hmdt.setup();
-    hmdt.setPoint(70.5);
+    // hmdt.setPoint(70.5);
 
-    menu.setup();
+    menu.setup(updateParameters);
+
+    buz.setup();
+    // buz.setEnable(false);
 
     noInterrupts(); //desabilita a interrupção global
         //TIMER 1 - para controle de leituras
@@ -36,15 +39,17 @@ void setup() {
 		TCNT2  = 0; // initialize counter value to 0
 		// set compare match register for 8333.333333333334 Hz increments
 		OCR2A = 239; // = 16000000 / (8 * 8333.333333333334) - 1 (must be <256)
-		// turn on CTC mode
+
+        // turn on CTC mode
 		TCCR2B |= (1 << WGM21);
 		// Set CS22, CS21 and CS20 bits for 8 prescaler
 		TCCR2B |= (0 << CS22) | (1 << CS21) | (0 << CS20);
-		// enable timer compare interrupt
+        // enable timer compare interrupt
 		TIMSK2 |= (1 << OCIE2A);
     interrupts(); //habilita a interrupção global
 
-    pinMode(_pinInterrupt, INPUT_PULLUP);              
+    pinMode(_pinInterrupt, INPUT_PULLUP);  
+    pinMode(16,OUTPUT);            
     // attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, FALLING);
     attachInterrupt(digitalPinToInterrupt(_pinInterrupt), interruptZeroCross, RISING);
     
@@ -59,14 +64,28 @@ void loop() {
         tmp.show(lcd,0,3);
         hmdt.show(lcd,6,2);
 
+        hmdt.control(bme.getHumidity());
         tmp.control(bme.getTemperature());
-
-	    hmdt.control(bme.getHumidity());
 
         oneSecond = 0;
     }
 
     menu.loop();
+}
+
+void updateParameters(MYDATA data)
+{
+    tmp.setPoint(data.tempSetPoint);
+    tmp.setKD(data.tempSetKd);
+    tmp.setKI(data.tempSetKi);
+    tmp.setKP(data.hmdtSetKp);
+
+    hmdt.setPoint(data.hmdtSetPoint);
+    hmdt.setKD(data.hmdtSetKd);
+    hmdt.setKI(data.hmdtSetKi);
+    hmdt.setKP(data.hmdtSetKp);
+    // data.time
+    // data.date
 }
 
 ISR(TIMER1_OVF_vect)
@@ -78,6 +97,8 @@ ISR(TIMER1_OVF_vect)
     // tmp.show(lcd,0,3);
     // hmdt.control(bme.getHumidity());
     // hmdt.show(lcd,6,2);
+    
+
 }
 
 void interruptZeroCross()
@@ -105,7 +126,7 @@ ISR(TIMER2_COMPA_vect){
         if (step >= freqStep) {
             zero_cross = false; //reset zero cross detection
             step = 0;
-        }           
+        }      
     } else {
         if (step >= freqStep) {
             //TODO - implementar alarme para avisar problema no cross detecting
@@ -115,6 +136,9 @@ ISR(TIMER2_COMPA_vect){
             step ++;
         }
     }
+    
+    buz.interruptControl();
+    
 }  
 
 #endif //__MAIN__CPP__
