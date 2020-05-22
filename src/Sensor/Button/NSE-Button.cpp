@@ -3,11 +3,11 @@
 
 #include "NSE-Button.h"
 
-Button::Button (uint8_t pin, bool pullup = false, uint16_t debounceDelay = 50)
+Button::Button (uint8_t pin, uint8_t mode = LOW, bool pullup = false, uint16_t debounceDelay = 50)
 {
     _pin = pin;
-    _state = LOW;
-    _lastState = LOW;
+    _state = mode;
+    _lastState = mode;
     _lastMillis = 0;
     _debounceDelay = debounceDelay;
     _lastDebounceTime = 0;

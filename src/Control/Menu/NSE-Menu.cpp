@@ -17,9 +17,9 @@ Menu::Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnLeft, uint8_t btn
         _btnLeft = new Button(btnLeft, false, 10);
         _btnRight = new Button(btnRight, false, 10);
     #endif 
-    _btnUp = new Button(btnUp, false, 10);
-    _btnDown = new Button(btnDown, false, 10);
-    _btnEnter = new Button(enter, false);
+    _btnUp = new Button(btnUp, HIGH, false, 10);
+    _btnDown = new Button(btnDown, HIGH, false, 10);
+    _btnEnter = new Button(enter, HIGH, false);
 
 
 }
@@ -31,9 +31,9 @@ Menu::Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnUp, uint8_t btnDo
 
     _txMENU = menuOptions;
 
-    _btnUp = new Button(btnUp, false, 10);
-    _btnDown = new Button(btnDown, false, 10);
-    _btnEnter = new Button(enter, false);
+    _btnUp = new Button(btnUp, HIGH, false, 10);
+    _btnDown = new Button(btnDown, HIGH, false, 10);
+    _btnEnter = new Button(enter, HIGH, false);
 
 
 }

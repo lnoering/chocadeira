@@ -6,7 +6,7 @@
 
 class Button {
     public:
-        Button (uint8_t pin, bool pullup, uint16_t debounceDelay = 50);
+        Button (uint8_t pin, uint8_t mode, bool pullup, uint16_t debounceDelay = 50);
         virtual ~Button();
         bool check(bool triggerState = LOW);
 

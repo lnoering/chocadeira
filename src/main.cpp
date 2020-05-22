@@ -8,19 +8,13 @@ void setup() {
     lcd.begin(20, 4);
     
     rtc.setup();
-    
     bme.setup();
-
     tmp.setup();
-    // tmp.setPoint(30.27);
-
     hmdt.setup();
-    // hmdt.setPoint(70.5);
-
     menu.setup(updateParameters);
-
     buz.setup();
-    // buz.setEnable(false);
+    
+    buz.setEnable(false);
 
     noInterrupts(); //desabilita a interrupção global
         //TIMER 1 - para controle de leituras
