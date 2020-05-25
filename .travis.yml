@@ -101,7 +101,7 @@ before_install:
    - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
 
 install:
-    - pip install -U platformio
+    - python -m pip install -U platformio
     - platformio update
     #    - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
 
