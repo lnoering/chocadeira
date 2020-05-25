@@ -1,0 +1,118 @@
+# Continuous Integration (CI) is the practice, in software
+# engineering, of merging all developer working copies with a shared mainline
+# several times a day < https://docs.platformio.org/page/ci/index.html >
+#
+# Documentation:
+#
+# * Travis CI Embedded Builds with PlatformIO
+#   < https://docs.travis-ci.com/user/integration/platformio/ >
+#
+# * PlatformIO integration with Travis CI
+#   < https://docs.platformio.org/page/ci/travis.html >
+#
+# * User Guide for `platformio ci` command
+#   < https://docs.platformio.org/page/userguide/cmd_ci.html >
+#
+#
+# Please choose one of the following templates (proposed below) and uncomment
+# it (remove "# " before each line) or use own configuration according to the
+# Travis CI documentation (see above).
+#
+
+
+#
+# Template #1: General project. Test it using existing `platformio.ini`.
+#
+
+# language: python
+# python:
+#     - "2.7"
+#
+# sudo: false
+# cache:
+#     directories:
+#         - "~/.platformio"
+#
+# install:
+#     - pip install -U platformio
+#     - platformio update
+#
+# script:
+#     - platformio run
+
+
+#
+# Template #2: The project is intended to be used as a library with examples.
+#
+
+# language: python
+# python:
+#     - "2.7"
+#
+# sudo: false
+# cache:
+#     directories:
+#         - "~/.platformio"
+#
+# env:
+#     - PLATFORMIO_CI_SRC=path/to/test/file.c
+#     - PLATFORMIO_CI_SRC=examples/file.ino
+#     - PLATFORMIO_CI_SRC=path/to/test/directory
+#
+# install:
+#     - pip install -U platformio
+#     - platformio update
+#
+# script:
+#     - platformio ci --lib="." --board=ID_1 --board=ID_2 --board=ID_N
+
+language: c
+python:
+    - 2.7
+sudo: false
+cache:
+  directories:
+    # - ~/arduino_ide
+    # - ~/.arduino15/packages/
+    - ~/.platformio
+git:
+  depth: false
+  quiet: true
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+    packages:
+      - python3-pip
+      - python3-wheel
+      - clang-format-5.0
+env:
+  global:
+     - PRETTYNAME="NSE - Arduino - Chocadeira"
+# Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
+#     - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+#     - PLATFORMIO_CI_SRC=path/to/test/file.c
+#     - PLATFORMIO_CI_SRC=examples/file.ino
+#     - PLATFORMIO_CI_SRC=path/to/test/directory
+
+before_install:
+   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+
+install:
+    - pip install -U platformio
+    - platformio update
+    #    - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
+
+
+script:
+   - python run-clang-format.py -r .
+   - platformio ci --lib="." --board=uno
+
+#    - build_main_platforms
+
+# Generate and deploy documentation
+after_success:
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
