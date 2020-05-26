@@ -1,4 +1,14 @@
 ## Chocadeira
+<div name="header">
+    <p style="display:inline-block;">
+        <img alt="logo-chocadeira" class="avatar rounded-2" height="60" src="/icon.png" width="60">
+    </p>
+    <p style="float:right; display:inline-block;">
+        <a href="https://travis-ci.org/lnoering/chocadeira">
+            <img src="https://travis-ci.org/lnoering/chocadeira.svg?branch=master" alt="Build Status">
+        </a>
+    </p>
+</div>
 
 ### Plataforma
     - Arduino Uno
