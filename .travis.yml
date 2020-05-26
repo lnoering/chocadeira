@@ -16,5 +16,4 @@ install:
     - platformio update
 
 script:
-    - platformio ci --project-conf=platoformio.ini
-#   - platformio ci  --lib="." --board=uno
+    - platformio ci --project-conf=platformio.ini
