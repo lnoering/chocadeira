@@ -66,53 +66,74 @@
 # script:
 #     - platformio ci --lib="." --board=ID_1 --board=ID_2 --board=ID_N
 
+# language: c
+# python:
+#     - 2.7
+# sudo: false
+# cache:
+#   directories:
+#     # - ~/arduino_ide
+#     # - ~/.arduino15/packages/
+#     - ~/.platformio
+# git:
+#   depth: false
+#   quiet: true
+# addons:
+#   apt:
+#     sources:
+#       - llvm-toolchain-trusty-5.0
+#       - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
+#     packages:
+#       - python3-pip
+#       - python3-wheel
+#       - clang-format-5.0
+# env:
+#   global:
+#      - PRETTYNAME="NSE - Arduino - Chocadeira"
+# # Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
+# #     - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+# #     - PLATFORMIO_CI_SRC=path/to/test/file.c
+# #     - PLATFORMIO_CI_SRC=examples/file.ino
+# #     - PLATFORMIO_CI_SRC=path/to/test/directory
+
+# before_install:
+#    - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+#    - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+
+# install:
+#     - python -m pip install --user -U platformio
+#     - platformio update
+#     #    - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
+
+
+# script:
+#    - python run-clang-format.py -r .
+#    - platformio ci --lib="." --board=uno
+
+# #    - build_main_platforms
+
+# # Generate and deploy documentation
+# after_success:
+#   - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
+#   - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
+
 language: c
 python:
-    - 2.7
+    - "2.7"
+
 sudo: false
 cache:
-  directories:
-    # - ~/arduino_ide
-    # - ~/.arduino15/packages/
-    - ~/.platformio
-git:
-  depth: false
-  quiet: true
-addons:
-  apt:
-    sources:
-      - llvm-toolchain-trusty-5.0
-      - key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
-    packages:
-      - python3-pip
-      - python3-wheel
-      - clang-format-5.0
-env:
-  global:
-     - PRETTYNAME="NSE - Arduino - Chocadeira"
-# Optional, will default to "$TRAVIS_BUILD_DIR/Doxyfile"
-#     - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
-#     - PLATFORMIO_CI_SRC=path/to/test/file.c
-#     - PLATFORMIO_CI_SRC=examples/file.ino
-#     - PLATFORMIO_CI_SRC=path/to/test/directory
+    directories:
+        - "~/.platformio"
 
-before_install:
-   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
-   - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
+env:
+    - PLATFORMIO_CI_SRC=path/to/test/file.c
+    - PLATFORMIO_CI_SRC=examples/file.ino
+    - PLATFORMIO_CI_SRC=path/to/test/directory
 
 install:
-    - python -m pip install --user -U platformio
+    - pip install --user -U platformio
     - platformio update
-    #    - arduino --install-library "Adafruit ILI9341","Adafruit GFX Library"
-
 
 script:
-   - python run-clang-format.py -r .
-   - platformio ci --lib="." --board=uno
-
-#    - build_main_platforms
-
-# Generate and deploy documentation
-after_success:
-  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
-  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
+    - platformio ci --lib="." --board=ID_1 --board=ID_2 --board=ID_N
