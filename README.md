@@ -1,28 +1,36 @@
-## Chocadeira
-<div name="header">
-    <p style="display:inline-block;">
-        <img alt="logo-chocadeira" class="avatar rounded-2" height="60" src="/icon.png" width="60">
-    </p>
-    <p style="float:right; display:inline-block;">
-        <a href="https://travis-ci.org/lnoering/chocadeira">
-            <img src="https://travis-ci.org/lnoering/chocadeira.svg?branch=master" alt="Build Status">
-        </a>
-    </p>
-</div>
+<h3 align="center">Chocadeira/Brooder</h1>
+<p align="center">
+    <img alt="logo-chocadeira" class="avatar rounded-2" height="60" src="/icon.png" width="60">
+</p>
+<p align="center">
+    <a href="https://travis-ci.org/lnoering/chocadeira">
+        <img src="https://travis-ci.org/lnoering/chocadeira.svg?branch=master" alt="Build Status">
+    </a>
+</p>
 
-### Plataforma
+
+### Plataforma/Platform
     - Arduino Uno
 
-### Objetivo
+
+### Objetivo/Objective
     Controlar a temperatura, humidade e o tempo para a incubação de ovos.
+    /
+    Control temperature, humidity and time for hatching eggs.
 
 
-### Melhorias a serem feitas
-    - Criar Menu
-    - Criar INPUT para verificar a bandeja de água.
-    - Criar controle PID na saída digital que irá acionar o aquecimento.
-    - Definir o que deve aparecer nas telas.
-    - Criar classe de ALARMES.
+### Funcionalidades/Functionalities
+    > Controle de temperatura.
+        - PID
+        - Detecção da passagem da tensão em 0, para controle PWM. (220volts)
+    > Controle da Humidade.
+        - PID
+        - Detecção da passagem da tensão em 0, para controle PWM. (220volts)
+    > Alarme
+    > Sensor para verificar se tem água no recipiente.
+        - Caso não tenha o controle de Humidade não é acionado.
+    > Menu [3 teclas para controle. (UP/OK/DOWN)]
+
 
 ### IO
     Obs.: PINOS conforme a placa do arduino.
@@ -53,18 +61,40 @@
         - PINO (2)
     - Buzzer para Alarme
         - PINO (16)
+
+
 ### Menu
-> "Set Point Temperatura"
--   Setar a temperatura que manterá a saída acionada.
 
-> "Offset Rele"
--   Tempo em segundo para acontecer mudança do status da saída. (Prevenir mundanças consecutivas, para não queimar o motor).
-
-> "Offset Temperatura"
--   Decrementar diretamente da leitura do sensor.
-
+> "Configurar Data"
+-   Configurar a Data.
+> "Configurar Hora"
+-   Configurar a Hora.
+> "Set Point Temp."
+-   Valor desejado para a Temperatura.
+> "Set Ki Temperature"
+-   Var do controle PID.
+> "Set Kp Temperature"
+-   Var do controle PID.
+> "Set Kd Temperature"
+-   Var do controle PID.
+> "Set Point Humidity"
+-   Valor desejado para a Humidade.
+> "Set Ki Humidity"
+-   Var do controle PID.
+> "Set Kp Humidity"
+-   Var do controle PID.
+> "Set Kd Humidity"
+-   Var do controle PID.
 > "Salvar e Sair"
 -   Grava na EEPROM e sai do menu.
-
 > "Sair"
--   Apenas sai do Menu.
+-   Sai sem salvar.
+
+
+### Lista de melhorias/List of improvements
+    - Criar Menu
+        - Tempo total do processo para eclosão.
+        - Tempo para virar os ovos.
+    - Definir o que deve aparecer nas telas.
+    - Criar classe de ALARMES.
+    - Não parar as rotinas de controle quando entrar no menu.
