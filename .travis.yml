@@ -8,8 +8,8 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini"
-    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_deps=1466@0.0.2'"
+    - PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778'"
+    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini"
 
 install:
     - pip install --user -U platformio
