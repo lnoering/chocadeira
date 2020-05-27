@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <AUnit.h>
 
 test(exampleTest) {
