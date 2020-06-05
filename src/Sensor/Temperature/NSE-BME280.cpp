@@ -43,36 +43,38 @@ void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types typ
         case BME280Types::PRESSURE:
                 read = _bme->readPressure();
                 dtostrf(read,4,0,parse);
-                sprintf(print,"%s",parse);
-                lcd.setCursor(col,lin);
-                lcd.print(parse);
-                lcd.print(" hPa");
+                sprintf(
+                        print,
+                        "%shPa",
+                        parse);
             break;
         case BME280Types::ALTIMETER:
                 read = _bme->readAltitude(SEALEVELPRESSURE_HPA); //Change the "1050.35" to your city current barrometric pressure (https://www.wunderground.com)
                 dtostrf(read,4,2,parse);
-                sprintf(print,"%s",parse);
-                lcd.setCursor(col,lin);
-                lcd.print(parse);
-                lcd.print(" ft");
+                sprintf(
+                        print,
+                        "%sft",
+                        parse);
             break;
         case BME280Types::HUMIDITY:
                 read = _bme->readHumidity();
                 dtostrf(read,4,1,parse);
-                sprintf(print,"%s",parse);
-                lcd.setCursor(col,lin);
-                lcd.print(parse);
-                lcd.print(char(37));
+                sprintf(
+                        print,
+                        "%s%c",
+                        parse, 37);
             break;
         default:
                 read = _bme->readTemperature();
                 dtostrf(read,4,2,parse);
-                sprintf(print,"%s C",parse);
-                lcd.setCursor(col,lin);
-                lcd.print(parse);
-                lcd.print(char(223));
-                lcd.print("C");
+                sprintf(
+                        print,
+                        "%s%cC",
+                        parse,char(223));
     }
+    lcd.setCursor(col,lin);
+    lcd.print(print);
+
 }
 
 #endif //NSE_BME280_CPP
