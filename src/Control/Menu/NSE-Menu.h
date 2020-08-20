@@ -20,21 +20,25 @@
 enum MENUTYPE { Menu1, Menu2, Flag, Number, Float, List, Date, Time };
 
 struct TIME{
-    unsigned int hora;
-    unsigned int minuto;
-    unsigned int segundo;
+    uint8_t hora;
+    uint8_t minuto;
+    uint8_t segundo;
 };
 
 struct DATE{
-    unsigned int dia;
-    unsigned int mes;
-    unsigned int ano;
+    uint8_t dia;
+    uint8_t mes;
+    uint16_t ano;
 };
 
 /* CONFIGURACOES */
 struct MYDATA{             // Estrutura STRUCT com as variables que armazenarao ds datos que na memoria EEPROM
     DATE date;
     TIME time;
+    char inicRotateEggs;
+    char fimRotateEggs;
+    char qtdRotatesByDay;
+    char totDaysProccess;
     float tempSetPoint;
     float tempSetKi;
     float tempSetKp;
@@ -56,7 +60,7 @@ class Menu
         Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnUp, uint8_t btnDown, uint8_t enter);
         virtual ~Menu(); 
         void control(float temperature);
-    
+
         void setup(void (*__upParams)(MYDATA));
         void loop();
         void render(char * render, byte x, byte y);
@@ -66,7 +70,8 @@ class Menu
         MENUBUTTON readButtons();
         void openSubMenu(byte menuID, MENUTYPE screen, float *value, float minValue, float maxValue, char * format);
         void openSubMenu(byte menuID, MENUTYPE screen, int *value, int minValue, int maxValue, char * format);
-        void openSubMenu (byte menuID, MENUTYPE screen, byte * value, const char * options[]);
+        void openSubMenu(byte menuID, MENUTYPE screen, char *value, char minValue, char maxValue, char * format);
+        void openSubMenu(byte menuID, MENUTYPE screen, byte * value, const char * options[]);
         void openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct);
         void openSubMenu(byte menuID, MENUTYPE screen, struct TIME *timeStruct);
 

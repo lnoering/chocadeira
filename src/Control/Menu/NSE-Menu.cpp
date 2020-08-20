@@ -10,7 +10,7 @@ const char *txtFormats[] = {"C","F"};
 Menu::Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnLeft, uint8_t btnRight, uint8_t btnUp, uint8_t btnDown, uint8_t enter)
 : _lcd(lcd)
 {
-    _totOptions = 12;
+    _totOptions = 16;
 
     _txMENU = menuOptions;
     #if FIVE_BUTTONS==true
@@ -27,7 +27,7 @@ Menu::Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnLeft, uint8_t btn
 Menu::Menu(LiquidCrystal &lcd, char *menuOptions[], uint8_t btnUp, uint8_t btnDown, uint8_t enter)
 : _lcd(lcd)
 {
-    _totOptions = 12;
+    _totOptions = 16;
 
     _txMENU = menuOptions;
 
@@ -57,12 +57,16 @@ void Menu::setup(void (*__upParams)(MYDATA))
     // memory.d.time.hora = 10;
     // memory.d.time.minuto = 25;
     // memory.d.time.segundo = 45;
-    // memory.d.tempSetPoint = 10.0;
+    // memory.d.inicRotateEggs = 1;
+    // memory.d.fimRotateEggs = 1;
+    // memory.d.qtdRotatesByDay = 2;
+    // memory.d.totDaysProccess = 50;
+    // memory.d.tempSetPoint = 26.5;
     // memory.d.tempSetKi = 1.0;
     // memory.d.tempSetKp = 1.0;
     // memory.d.tempSetKd = 1.0;
 
-    // memory.d.hmdtSetPoint = 10.0;
+    // memory.d.hmdtSetPoint = 70.0;
     // memory.d.hmdtSetKi = 1.0;
     // memory.d.hmdtSetKp = 1.0;
     // memory.d.hmdtSetKd = 1.0;
@@ -147,39 +151,51 @@ void Menu::openMenu()
                 case 1:
                         openSubMenu( idxMenu, MENUTYPE::Time,   &memory.d.time); 
                     break;
-                case 2:     
+                case 2:
+                        openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.inicRotateEggs, 0, 5, "dias"    ); break;
+                    break;
+                case 3:
+                        openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.fimRotateEggs, 0, 5, "dias"    ); break;
+                    break;
+                case 4:
+                        openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.qtdRotatesByDay, 0, 24, "x vz dia"    ); break;
+                    break;
+                case 5:
+                        openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.totDaysProccess, 0, 60, "dias"    ); break;
+                    break;
+                case 6:     
                         sprintf(format,"%c%c",char(223),'C');
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetPoint, -20.0, 99.9, format); 
                     break;
-                case 3:
+                case 7:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKi, -20.0, 99.9,(char*)"Ki"); 
                     break;
-                case 4:
+                case 8:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKp, -20.0, 99.9,(char*)"Kp"); 
                     break;
-                case 5:
+                case 9:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.tempSetKd, -20.0, 99.9,(char*)"Kd"); 
                     break;
-                case 6:
+                case 10:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetPoint, 0.0, 99.9,(char*)"%"); 
                     break;
-                case 7:
+                case 11:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKi, -20.0, 99.9,(char*)"Ki"); 
                     break;
-                case 8:
+                case 12:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKp, -20.0, 99.9,(char*)"Kp"); 
                     break;
-                case 9:
+                case 13:
                         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.hmdtSetKd, -20.0, 99.9,(char*)"Kd"); 
                     break;
-                // case 1: openSubMenu( idxMenu, MENUTYPE::Number,  &memory.d.delay, 0, 60, "s"    ); break;
-                // case 2: openSubMenu( idxMenu, MENUTYPE::List,  &memory.d.format,  txtFormats    ); break;
-                // case 3: 
-                //         sprintf(format,"%c%c",char(223),getTemperatureFormat());
-                //         openSubMenu( idxMenu, MENUTYPE::Float,   &memory.d.offsetTemp, -20.0, 99.9, format); 
-                //     break;
-                case 10: writeConfiguration(); exitMenu = true;                                     break;
-                case 11: readConfiguration();  exitMenu = true;                                     break;
+                case 14: 
+                        // writeConfiguration();
+                        exitMenu = true;
+                    break;
+                case 15: 
+                        readConfiguration();  
+                        exitMenu = true;                                     
+                    break;
             }
             forcePrint = true;
         }
@@ -225,10 +241,10 @@ void Menu::openSubMenu(byte menuID, MENUTYPE screen, struct TIME *timeStruct) {
     boolean forcePrint  = true;
     uint8_t countToExit = 0;
 
-    unsigned int minValue = 0;
-    unsigned int maxValue = 23;
+    uint8_t minValue = 0;
+    uint8_t maxValue = 23;
 
-    unsigned int *value;
+    uint8_t *value;
 
     char linhaDisplay[20];
 
@@ -315,10 +331,11 @@ void Menu::openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct) {
     boolean forcePrint  = true;
     uint8_t countToExit = 0;
 
-    unsigned int minValue = 0;
-    unsigned int maxValue = 31;
+    uint16_t minValue = 0;
+    uint16_t maxValue = 31;
 
-    unsigned int *value;
+    uint8_t *value; 
+    uint16_t *value16;
 
     char linhaDisplay[20];
 
@@ -344,24 +361,38 @@ void Menu::openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct) {
                     break;
                 case 2 :
                         (*dataStruct).mes = (*value);
-                        value = (&(*dataStruct).ano);
+                        value16 = (&(*dataStruct).ano);
                         minValue = 2020;
                         maxValue = 2090;
                     break;
                 
                 default: //acima de 3 sai do menu
-                        (*dataStruct).ano = (*value);
+                        (*dataStruct).ano = (*value16);
                         exitSubMenu = true;
                     break;
             }
         }
-        else if( btnPressed == MENUBUTTON::Up && (*value)-1 >= minValue )
+        else if( btnPressed == MENUBUTTON::Up)
         {
-            (*value)--;
+            if(countToExit < 2 && (*value)-1 >= minValue ) {
+                (*value)--;
+            } else if (countToExit >= 2 && (*value16)-1 >= minValue ) {
+                (*value16)--;
+            }
         }
-        else if( btnPressed == MENUBUTTON::Down && (*value)+1 <= maxValue )
+        else if( btnPressed == MENUBUTTON::Down) 
         {
+            if (countToExit < 2 && (*value)+1 <= maxValue ) {
+                (*value)++;        
             (*value)++;
+                (*value)++;        
+            (*value)++;
+                (*value)++;        
+            (*value)++;
+                (*value)++;        
+            } else if (countToExit >= 2 && (*value16)+1 <= maxValue ) {
+                (*value16)++;
+            }
         }
 
 
@@ -388,7 +419,7 @@ void Menu::openSubMenu(byte menuID, MENUTYPE screen, struct DATE *dataStruct) {
                         _lcd.setCursor(0,0);
                         _lcd.print(_txMENU[menuID]);
                         _lcd.setCursor(0,1);
-                        sprintf(linhaDisplay,"    %02u/%02u/<%04u>    ",(*dataStruct).dia,(*dataStruct).mes,(*value));
+                        sprintf(linhaDisplay,"    %02u/%02u/<%04u>    ",(*dataStruct).dia,(*dataStruct).mes,(*value16));
                         _lcd.print(linhaDisplay);
                     break;
             }
@@ -464,12 +495,75 @@ void Menu::openSubMenu (byte menuID, MENUTYPE screen, int * value, int minValue,
     _lcd.clear();
 }
 
+void Menu::openSubMenu (byte menuID, MENUTYPE screen, char * value, char minValue, char maxValue, char * format = (char*)"")
+{
+    boolean exitSubMenu = false;
+    boolean forcePrint  = true;
+
+    _lcd.clear();
+
+    while( !exitSubMenu )
+    {
+        btnPressed = readButtons();
+
+        if( btnPressed == MENUBUTTON::Ok )
+        {
+            exitSubMenu = true;
+        }
+        else if( btnPressed == MENUBUTTON::Up && (*value)-1 >= minValue )
+        {
+            (*value)--;
+        }
+        else if( btnPressed == MENUBUTTON::Down && (*value)+1 <= maxValue )
+        {
+            (*value)++;
+        }
+
+
+        if( !exitSubMenu && (forcePrint || btnPressed != MENUBUTTON::Unknown) )
+        {
+            forcePrint = false;
+
+            _lcd.setCursor(0,0);
+            _lcd.print(_txMENU[menuID]);
+
+            _lcd.setCursor(0,1);
+            _lcd.print("<");
+            _lcd.setCursor(_columnsLCD-1,1);
+            _lcd.print(">");
+
+            switch (screen) {
+                case MENUTYPE::Flag :
+                        _lcd.setCursor(_columnsLCD/2-1, 1);
+                        _lcd.print((*value) == 0 ? "Não" : "Sim");
+                    break;
+                case MENUTYPE::Number :
+                        _lcd.setCursor(_columnsLCD/2-1, 1);
+                        _lcd.print((*value));
+                        _lcd.print(format);
+                        _lcd.print(" ");
+                    break;
+                case MENUTYPE::Float :
+                        _lcd.setCursor(_columnsLCD/2-1, 1);
+                        _lcd.print((*value));
+                        _lcd.print(" ");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
+    _lcd.clear();
+}
+
 void Menu::readConfiguration()
 {
     for( unsigned int i=0 ; i < sizeof(memory.d) ; i++ ) {
         memory.b[i] = EEPROM.read(i);
     }
-    writeConfiguration();
+    // writeConfiguration();
 }
 
 void Menu::writeConfiguration()
@@ -478,7 +572,7 @@ void Menu::writeConfiguration()
         EEPROM.write( i, memory.b[i] );
     }
 
-    (*_upParams)(memory.d);
+    _upParams(memory.d);
 }
 
 /**
@@ -591,7 +685,6 @@ void Menu::openSubMenu (byte menuID, MENUTYPE screen, byte * value, const char *
     }
     _lcd.clear();
 }
-
 
 MENUBUTTON Menu::readButtons()
 {

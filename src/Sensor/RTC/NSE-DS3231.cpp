@@ -32,7 +32,7 @@ void DS3231::setup()
         }
         else
         {
-          _rtc->SetDateTime(compiled);
+            _rtc->SetDateTime(compiled);
         }
     }
   
@@ -96,6 +96,11 @@ void DS3231::show(LiquidCrystal& lcd, uint8_t col, uint8_t lin)
             now.Minute(),
             now.Second() );
     lcd.print(display);
+}
+
+void DS3231::setDateTime(RtcDateTime datetime)
+{
+    _rtc->SetDateTime(datetime);
 }
 
 

@@ -71,9 +71,11 @@
 -   Configurar a Hora.
 > "Inicio p/ virar ovos"
 -   Setar quantos dias deve esperar para virar os ovos.
+> "Fim p/ virar ovo    "
+-   Setar quantos dias deve faltando para acabar o processo deve parar de virar os ovos.
 > "Qtd viradas p/ dia"
 -   Setar a quantidade de vezes q ele deve virar por dia
-> "Qtd dias do processo"
+> "Qtd dias p/ processo"
 -   Setar o total de dias para finalizar o processo.
 > "Set Point Temp."
 -   Valor desejado para a Temperatura.

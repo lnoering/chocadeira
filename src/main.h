@@ -13,6 +13,10 @@
 char *txtMENU[] = {
     (char*)"Configurar Data    ",
     (char*)"Configurar Hora    ",
+    (char*)"Inicio p/ virar ovo",
+    (char*)"Fim p/ virar ovo   ",
+    (char*)"Qtd viradas p/ dia ",
+    (char*)"Qtd dias p/ process",
     (char*)"Set Point Temp.    ",
     (char*)"Set Ki Temperature ",
     (char*)"Set Kp Temperature ",

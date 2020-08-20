@@ -16,6 +16,7 @@ class DS3231
         bool isOperating();
         RtcDateTime getDateTime();
         void show(LiquidCrystal& lcd, uint8_t col, uint8_t lin);
+        void setDateTime(RtcDateTime datetime);
 
     protected:
 
