@@ -104,3 +104,8 @@
     - Definir o que deve aparecer nas telas.
     - Criar classe de ALARMES.
     - Não parar as rotinas de controle quando entrar no menu.
+
+### Bugs
+    - carácteres malucos quando o interrupt no pino 2 que é a deteção do zero. Acontece quando tira a alimentação do interrupt. 
+    - quando tira o pino do sensor de temperatura, ele não mostra mais os valores no display após colocar novamente. Parece que ele não inicia a rotina do sensor automaticamente.
+    - Menu onde seta a data e hora do RTC
