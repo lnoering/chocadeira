@@ -32,16 +32,18 @@ float BME280::getHumidity()
     return _bme->readHumidity();
 }
 
-void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type)
+void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type, boolean toRead, float value)
 {
     char parse[20] = "",
          print[20];
-    float read;
+    float read = value;
 
     switch (type)
     {
         case BME280Types::PRESSURE:
-                read = _bme->readPressure();
+                if (toRead) {
+                    read = _bme->readPressure();
+                }
                 dtostrf(read,4,0,parse);
                 sprintf(
                         print,
@@ -49,7 +51,9 @@ void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types typ
                         parse);
             break;
         case BME280Types::ALTIMETER:
-                read = _bme->readAltitude(SEALEVELPRESSURE_HPA); //Change the "1050.35" to your city current barrometric pressure (https://www.wunderground.com)
+                if (toRead) {
+                    read = _bme->readAltitude(SEALEVELPRESSURE_HPA); //Change the "1050.35" to your city current barrometric pressure (https://www.wunderground.com)
+                }
                 dtostrf(read,4,2,parse);
                 sprintf(
                         print,
@@ -57,7 +61,9 @@ void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types typ
                         parse);
             break;
         case BME280Types::HUMIDITY:
-                read = _bme->readHumidity();
+                if (toRead) {
+                    read = _bme->readHumidity();
+                }
                 dtostrf(read,4,1,parse);
                 sprintf(
                         print,
@@ -65,7 +71,9 @@ void BME280::show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types typ
                         parse, 37);
             break;
         default:
-                read = _bme->readTemperature();
+                if (toRead) {
+                    read = _bme->readTemperature();
+                }
                 dtostrf(read,4,2,parse);
                 sprintf(
                         print,

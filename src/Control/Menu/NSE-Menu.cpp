@@ -77,12 +77,12 @@ void Menu::setup(void (*__upParams)(MYDATA))
     _lcd.clear();
 }
 
-void Menu::loop()
+void Menu::loop(void (*controls)())
 {
     btnPressed = readButtons();
 
     if( btnPressed == MENUBUTTON::Ok ){
-        openMenu();
+        openMenu(controls);
     }
 }
 
@@ -92,7 +92,7 @@ void Menu::render(char * render, byte x, byte y)
     _lcd.print(render);
 }
 
-void Menu::openMenu()
+void Menu::openMenu(void (*controls)())
 {
     byte idxMenu       = 0;
     boolean exitMenu   = false;
@@ -108,6 +108,7 @@ void Menu::openMenu()
 
     while( !exitMenu )
     {
+        (*controls)();
         btnPressed = readButtons();
 
         if( btnPressed == MENUBUTTON::Up )

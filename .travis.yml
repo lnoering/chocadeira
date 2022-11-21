@@ -9,7 +9,7 @@ cache:
 
 env:
     - PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778,Wire,SPI'"
-    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini"
+    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778,Wire,SPI'"
 
 install:
     - pip install --user -U platformio

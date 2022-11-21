@@ -37,6 +37,9 @@ uint8_t _pinInterrupt = 2;
 uint8_t fiveSeconds = 0;
 uint8_t oneSecond = 0;
 
+volatile float _temperature;
+volatile float _humidity;
+
 volatile boolean zero_cross = false;  // Boolean to store a "switch" to tell us if we have crossed zero
 
 //65 = 60kz
@@ -50,6 +53,8 @@ volatile unsigned int stepBuzzer = 0;
 void setup();
 
 void loop();
+
+void controls();
 
 void updateParameters(MYDATA data);
 

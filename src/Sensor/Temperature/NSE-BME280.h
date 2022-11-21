@@ -1,6 +1,8 @@
 #ifndef NSE_BME280_H
 #define NSE_BME280_H
 
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 #include <LiquidCrystal.h>
 
@@ -25,7 +27,7 @@ class BME280
         float getTemperature();
         float getHumidity();
 
-        void show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type);
+        void show(LiquidCrystal & lcd, uint8_t col, uint8_t lin, BME280Types type, boolean toRead = true, float value = 0);
     
     protected:
 

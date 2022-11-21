@@ -58,9 +58,9 @@ class Menu
         void control(float temperature);
     
         void setup(void (*__upParams)(MYDATA));
-        void loop();
+        void loop(void (*controls)());
         void render(char * render, byte x, byte y);
-        void openMenu();    
+        void openMenu(void (*controls)());    
         void readConfiguration();
         void writeConfiguration();
         MENUBUTTON readButtons();

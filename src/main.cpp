@@ -51,20 +51,29 @@ void setup() {
 }
 
 void loop() {
+    //Controls
+    controls();
+
+
+    //Display
     if (oneSecond >= 1) {
-    	rtc.show(lcd,0,0);
-        bme.show(lcd,0,1,BME280Types::TEMPERATURE);
-        bme.show(lcd,0,2,BME280Types::HUMIDITY);
+        rtc.show(lcd,0,0);
+        bme.show(lcd,0,1,BME280Types::TEMPERATURE, false, _temperature);
+        bme.show(lcd,0,2,BME280Types::HUMIDITY, false, _humidity);
         tmp.show(lcd,0,3);
         hmdt.show(lcd,6,2);
 
-        hmdt.control(bme.getHumidity());
-        tmp.control(bme.getTemperature());
-
         oneSecond = 0;
     }
+    
+    //Menu (need still runing the controls)
+    menu.loop(controls);
+}
 
-    menu.loop();
+void controls() {
+    //Controls
+    hmdt.control(_humidity);
+    tmp.control(_temperature);
 }
 
 void updateParameters(MYDATA data)
@@ -84,13 +93,17 @@ void updateParameters(MYDATA data)
 
 ISR(TIMER1_OVF_vect)
 {
-    TCNT1 = 0xC2F7;                                 // Renicia TIMER
 
     oneSecond += 1;
     // tmp.control(bme.getTemperature());
     // tmp.show(lcd,0,3);
     // hmdt.control(bme.getHumidity());
     // hmdt.show(lcd,6,2);
+
+    _temperature = bme.getTemperature();
+    _humidity = bme.getHumidity();
+    
+    TCNT1 = 0xC2F7;                                 // Reinicia TIMER
     
 
 }
