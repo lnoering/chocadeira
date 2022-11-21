@@ -13,12 +13,20 @@ cache:
         - "~/.platformio"
 
 env:
-    - PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778,Wire,SPI'"
-    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778,Wire,SPI'"
+    #- PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini --project-option='lib_ignore=2778,Wire,SPI'"
+    - PLATFORMIO_CI_SRC=src PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini"
+    - PLATFORMIO_CI_SRC=test PLATFORMIO_CI_EXTRA_ARGS="--project-conf=platformio.ini"
 
 install:
     - pip install --user -U platformio
-    - platformio update
+    # - platformio update
+    - pio update
+    
+    # LiquidCrystal @ 1.0.7 (required: id:887 @ 1.0.7)
+    # Adafruit BME280 Library @ 2.0.2 (required: id:166 @ 2.0.2)
+    # RTC @ 2.3.5 (required: id:274 @ ^2.3.4)
+    # AUnit @ 1.3.2 (required: id:2778 @ 1.3.2)
+    - pio lib -g install 887 166 274 2778
 
 script:
     - platformio ci --lib="." $PLATFORMIO_CI_EXTRA_ARGS
