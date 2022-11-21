@@ -13,9 +13,17 @@
     - Arduino Uno
 
 ### Ferramentas/Tools
-    - IDE------------| [Visual Studio Code](https://code.visualstudio.com/) // 1.71.2
-    - IDE Extension--| [PlatformIO](https://platformio.org/) // Core 6.1.5 Home 3.4.3
-    - Libraries------| [Libs](https://github.com/lnoering/chocadeira/blob/master/platformio.ini)
+<div>
+    <p align="left">
+        <span> - IDE </span><a href="https://code.visualstudio.com/">Visual Studio Code</a> // 1.71.2
+    </p>
+    <p align="left">
+        <span> - IDE Extension </span><a href="https://platformio.org/">PlatformIO</a> // Core 6.1.5 Home 3.4.3
+    </p>
+    <p align="left">
+        <span> - Libraries </span><a href="https://github.com/lnoering/chocadeira/blob/master/platformio.ini">Libs</a>
+    </P>
+</div>
 
 ### Objetivo/Objective
     Controlar a temperatura, humidade e o tempo para a incubação de ovos.
