@@ -13,16 +13,16 @@
     - Arduino Uno
 
 ### Ferramentas/Tools
-<div>
-    <p align="left">
-        <span> - IDE </span><a href="https://code.visualstudio.com/">Visual Studio Code</a> // 1.71.2
-    </p>
-    <p align="left">
-        <span> - IDE Extension </span><a href="https://platformio.org/">PlatformIO</a> // Core 6.1.5 Home 3.4.3
-    </p>
-    <p align="left">
-        <span> - Libraries </span><a href="https://github.com/lnoering/chocadeira/blob/master/platformio.ini">Libs</a>
-    </P>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto">
+    <pre class="notranslate">
+        <code> - IDE </code><a href="https://code.visualstudio.com/">Visual Studio Code</a> // 1.71.2
+    </pre>
+    <pre class="notranslate">
+        <code> - IDE Extension </code><a href="https://platformio.org/">PlatformIO</a> // Core 6.1.5 Home 3.4.3
+    </pre>
+    <pre class="notranslate">
+        <code> - Libraries </code><a href="https://github.com/lnoering/chocadeira/blob/master/platformio.ini">Libs</a>
+    </Pre>
 </div>
 
 ### Objetivo/Objective
