@@ -3,7 +3,7 @@
 
 #include "NSE-Button.h"
 
-Button::Button (uint8_t pin, uint8_t mode = LOW, bool pullup = false, uint16_t debounceDelay = 50)
+Button::Button (uint8_t pin, uint8_t mode = LOW, bool pullup = false, uint16_t debounceDelay)
 {
     _pin = pin;
     _state = mode;
@@ -23,7 +23,7 @@ Button::~Button()
 
 }
 
-bool Button::check(bool triggerState = LOW) {
+bool Button::check(bool triggerState) {
     bool reading = digitalRead(_pin);
     
     if (reading != _lastState) {

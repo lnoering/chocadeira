@@ -1,2 +1,19 @@
-.pio
-.vscode
+# Ignore everything
+/*
+
+# Not these directories
+!src/
+!test/
+!lib/
+
+
+# Not these files
+!.pio/build/production/firmware.hex
+!.pio/build/debug/firmware.hex
+!.vscode/extensions.json
+!.gitignore
+!.travis.yml
+!.platformio.ini
+!icon.png
+!README.md
+
